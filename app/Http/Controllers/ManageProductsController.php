@@ -175,34 +175,38 @@ class ManageProductsController extends Controller
             return redirect()->back()->withErrors(['error' => 'Invalid data format']);
         }
 
-        foreach ($products as $productData) {
-            Log::info('Processing product:', ['id' => $productData['id'], 'data' => $productData]);
+      foreach ($products as $productData) {
+            Log::info('Processing product:', ['id' => $productData['product_id'], 'data' => $productData]);
 
-            $product = Product::find($productData['id']);
+            $product = Product::find($productData['product_id']);
             if (!$product) {
-                Log::warning('Product not found for update:', ['id' => $productData['id']]);
+                Log::warning('Product not found for update:', ['id' => $productData['product_id']]);
                 continue;
             }
 
-            // Merge existing product data with incoming changes
-            $mergedData = array_merge($product->toArray(), $productData);
+            $mergedData = array_intersect_key($productData, array_flip($product->getFillable()));
 
             try {
                 $validatedData = validator($mergedData, [
-                    'final_price' => 'required|numeric|min:0',
-                    'stocks' => 'required|integer|min:0',
-                    'status' => 'required|string|in:active,inactive',
+                    'final_price' => 'sometimes|numeric|min:0',
+                    'stocks' => 'sometimes|integer|min:0',
+                    'status' => 'sometimes|string|in:active,inactive',
                 ])->validate();
             } catch (\Exception $e) {
-                Log::error('Validation failed:', ['id' => $productData['id'], 'error' => $e->getMessage()]);
+                Log::error('Validation failed:', [
+                    'id' => $productData['product_id'],
+                    'error' => $e->getMessage(),
+                ]);
                 continue;
             }
 
             $updated = $product->update($validatedData);
-            Log::info('Product update result:', ['id' => $productData['id'], 'updated' => $updated]);
+            Log::info('Product update result:', [
+                'id' => $productData['product_id'],
+                'updated' => $updated,
+            ]);
         }
-
-        // Redirect back with success message using Inertia
+        
         return redirect()->route('admin.manage-products')->with('success', 'Products updated successfully!');
     }
 
