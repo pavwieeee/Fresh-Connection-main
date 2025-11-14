@@ -26,7 +26,7 @@ class PromotionController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'code' => 'required|string|unique:promotion,code|max:50',
+            'code' => 'required|string|unique:promotions,code|max:50',
             'discount_type' => 'required|in:percentage,fixed',
             'discount_value' => [
                 'required',
