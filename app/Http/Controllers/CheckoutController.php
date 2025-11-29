@@ -182,7 +182,7 @@ class CheckoutController extends Controller
     }
 
     // Add delivery fee (example $5.00, replace with actual logic)
-    $deliveryFee = 5.00;
+    $deliveryFee = 50.00;
 
     // Calculate final total with promotion discount
     $finalTotal = $subtotal - $discountAmount + $deliveryFee;

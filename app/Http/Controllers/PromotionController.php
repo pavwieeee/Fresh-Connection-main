@@ -27,7 +27,7 @@ class PromotionController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'code' => 'required|string|unique:promotions,code|max:50',
-            'discount_type' => 'required|in:percentage,fixed',
+            'discount_type' => 'required|in:percentage,fixed_amount,free_shipping',
             'discount_value' => [
                 'required',
                 'numeric',

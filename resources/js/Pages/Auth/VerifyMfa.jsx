@@ -73,7 +73,8 @@ export default function VerifyMfa({ expiresAt, userEmail }) {
                 )}
 
                 {errors.verification_code && (
-                    <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 rounded-lg">
+                    <div className="mb-4 p-3 text-sm text-red-600 bg-green-50 rounded-lg">
+                        
                         {errors.verification_code}
                     </div>
                 )}
